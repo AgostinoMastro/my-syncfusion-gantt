@@ -2,32 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Syncfusion EJ2 Gantt w/ Tasks JSON</title>
-    <!-- Syncfusion CSS from CDN -->
-    <link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet" />
+    <title>My Syncfusion Gantt</title>
+
+    <!-- 1) Syncfusion CSS from CDN (for EJ2 components) -->
+    <link
+      href="https://cdn.syncfusion.com/ej2/material.css"
+      rel="stylesheet"
+    />
+
+    <!-- 2) Optional styling (replace or remove as needed) -->
     <style>
-      html, body {
+      body {
+        font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        height: 100%;
-        font-family: sans-serif;
       }
-      .control-section {
-        padding: 20px;
+      .gantt-container {
+        padding: 16px;
+      }
+      .gantt-settings-button {
+        margin-bottom: 16px;
       }
     </style>
   </head>
   <body>
-    <div class="control-section">
-      <div class="content-wrapper">
-        <div id="DefaultFunctionalities"></div>
-      </div>
+    <!-- 3) A container for the Gantt and toolbar -->
+    <div class="gantt-container">
+      <!-- The "Settings" button (must match the ID used in default.ts) -->
+      <button
+        id="settings-btn"
+        class="gantt-settings-button"
+        aria-label="Open settings"
+      >
+        Settings
+      </button>
+
+      <!-- The Gantt will be appended here by default.ts -->
+      <div id="DefaultFunctionalities"></div>
     </div>
 
-    <!-- 
-      We'll inject the compiled JS (bundle.js) after building 
-      and copying these files to the gh-pages branch.
-    -->
+    <!-- 4) Load the Syncfusion all-in-one JS bundle from CDN -->
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+
+    <!-- 5) Load your Webpack bundle (the compiled default.ts) -->
+    <!--   Typically 'bundle.js' or whatever output you specified in webpack.config.js -->
     <script src="bundle.js"></script>
   </body>
 </html>
