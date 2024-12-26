@@ -12,8 +12,8 @@ jobs:
       # 1) Check out this repo
       - uses: actions/checkout@v3
 
-      # 2) Set up Node
-      - name: Use Node.js 16
+      # 2) Use Node
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -22,18 +22,17 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # 4) Build (Webpack compiles TypeScript -> dist/bundle.js)
+      # 4) Build your webpack project
       - name: Build
         run: npm run build
 
-      # 5) Copy index.html and tasks.json into dist/ 
-      #    so they are deployed to GitHub Pages along with bundle.js
-      - name: Copy additional files
+      # 5) Copy index.html & tasks.json (or any other static files) into dist/
+      - name: Copy Additional Files
         run: |
           cp index.html dist/index.html
           cp tasks.json dist/tasks.json
 
-      # 6) Deploy the /dist folder to the gh-pages branch
+      # 6) Deploy dist/ to gh-pages branch
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
