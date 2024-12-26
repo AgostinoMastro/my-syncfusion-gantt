@@ -1,28 +1,33 @@
 import { registerLicense } from "@syncfusion/ej2-base";
 import { Gantt, Selection } from "@syncfusion/ej2-gantt";
 
-// 1) Register your Syncfusion license key (replace with your actual key).
-registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERhWnpbcXJQRmQ=");
+// Register your Syncfusion license key (replace the placeholder)
+registerLicense("YOUR_LICENSE_KEY_STRING");
 
-// 2) Function to fetch tasks from tasks.json in the same folder as index.html.
+/**
+ * Fetch tasks from the `tasks.json` file.
+ */
 async function fetchTasksJSON(): Promise<any[]> {
-  // This assumes tasks.json is deployed at the same level as index.html
   const response = await fetch("./tasks.json");
   return response.json();
 }
 
-// 3) Parse projectId from URL query parameters (e.g. ?projectId=123).
+/**
+ * Parse projectId from URL (?projectId=123).
+ */
 function getProjectId(): number | null {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get("projectId");
   return raw ? parseInt(raw, 10) : null;
 }
 
-// 4) Filter tasks (and subtasks) by projectId (recursive).
+/**
+ * Recursively filter tasks (and subtasks) by projectId.
+ */
 function filterByProjectId(tasks: any[], projectId: number): any[] {
   return tasks
-    .filter((task) => task.ProjectID === projectId)
-    .map((task) => {
+    .filter(task => task.ProjectID === projectId)
+    .map(task => {
       if (task.subtasks) {
         task.subtasks = filterByProjectId(task.subtasks, projectId);
       }
@@ -30,22 +35,31 @@ function filterByProjectId(tasks: any[], projectId: number): any[] {
     });
 }
 
-// 5) Inject the Gantt modules (e.g., Selection).
+// Inject the required Gantt modules.
 Gantt.Inject(Selection);
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // A) Fetch all tasks
-    let allTasks = await fetchTasksJSON();
-
-    // B) Check if we have ?projectId=XYZ
+    // 1) Check if a valid projectId is present
     const projectId = getProjectId();
-    if (projectId) {
-      allTasks = filterByProjectId(allTasks, projectId);
+    if (!projectId) {
+      // If not, show an error message in the container
+      const container = document.getElementById("DefaultFunctionalities");
+      if (container) {
+        container.innerHTML =
+          "<h3 style='color:red'>Error: Project ID missing. Please relaunch from your application</h3>";
+      }
+      return; // Stop execution, don't load the Gantt
     }
 
-    // C) Create and configure the Gantt
-    const gantt: Gantt = new Gantt({
+    // 2) Fetch the full set of tasks
+    let allTasks = await fetchTasksJSON();
+
+    // 3) Filter tasks based on projectId
+    allTasks = filterByProjectId(allTasks, projectId);
+
+    // 4) Create the Gantt instance
+    const gantt = new Gantt({
       dataSource: allTasks,
       height: "450px",
       taskFields: {
@@ -56,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         duration: "Duration",
         progress: "Progress",
         dependency: "Predecessor",
-        child: "subtasks",
+        child: "subtasks"
       },
       treeColumnIndex: 1,
       columns: [
@@ -66,16 +80,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         { field: "EndDate" },
         { field: "Duration" },
         { field: "Predecessor" },
-        { field: "Progress" },
+        { field: "Progress" }
       ],
       labelSettings: {
-        leftLabel: "TaskName",
+        leftLabel: "TaskName"
       },
       projectStartDate: new Date("03/24/2024"),
-      projectEndDate: new Date("07/06/2024"),
+      projectEndDate: new Date("07/06/2024")
     });
 
-    // D) Append to DOM
+    // 5) Render the Gantt
     gantt.appendTo("#DefaultFunctionalities");
   } catch (error) {
     console.error("Error loading Gantt tasks:", error);
