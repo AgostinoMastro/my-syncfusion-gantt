@@ -6,8 +6,8 @@
     "build": "webpack"
   },
   "dependencies": {
-    "@syncfusion/ej2-base": "^28.x.x",
-    "@syncfusion/ej2-gantt": "^28.x.x"
+    "@syncfusion/ej2-base": "^28.1.33",
+    "@syncfusion/ej2-gantt": "^28.1.33"
   },
   "devDependencies": {
     "ts-loader": "^9.4.2",
