@@ -1,7 +1,10 @@
 import { registerLicense } from "@syncfusion/ej2-base";
-import { Gantt, Selection } from "@syncfusion/ej2-gantt";
+import { Gantt, Selection, Toolbar } from "@syncfusion/ej2-gantt";
 
-// Register your Syncfusion license key (replace the placeholder)
+/**
+ * 1) Register your Syncfusion license key.
+ *    (Replace "YOUR_LICENSE_KEY_STRING" with your actual key.)
+ */
 registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERgWXxacnRcT2k=");
 
 /**
@@ -14,11 +17,14 @@ async function fetchTasksJSON(): Promise<any[]> {
 
 /**
  * Parse projectId from URL (?projectId=123).
+ * Returns null if missing or invalid.
  */
 function getProjectId(): number | null {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get("projectId");
-  return raw ? parseInt(raw, 10) : null;
+  if (!raw) return null; // no param
+  const num = parseInt(raw, 10);
+  return isNaN(num) ? null : num;
 }
 
 /**
@@ -26,8 +32,8 @@ function getProjectId(): number | null {
  */
 function filterByProjectId(tasks: any[], projectId: number): any[] {
   return tasks
-    .filter(task => task.ProjectID === projectId)
-    .map(task => {
+    .filter((task) => task.ProjectID === projectId)
+    .map((task) => {
       if (task.subtasks) {
         task.subtasks = filterByProjectId(task.subtasks, projectId);
       }
@@ -35,33 +41,44 @@ function filterByProjectId(tasks: any[], projectId: number): any[] {
     });
 }
 
-// Inject the required Gantt modules.
-Gantt.Inject(Selection);
+// 2) Inject Gantt modules: now includes Toolbar
+Gantt.Inject(Selection, Toolbar);
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // 1) Check if a valid projectId is present
+    // A) Check if a valid projectId is present
     const projectId = getProjectId();
     if (!projectId) {
-      // If not, show an error message in the container
+      // If not, show an error message instead of the chart
       const container = document.getElementById("DefaultFunctionalities");
       if (container) {
         container.innerHTML =
-          "<h3 style='color:red'>Error: Project ID missing. Please relaunch from your application</h3>";
+          "<h3 style='color:red'>Error: Project ID missing. Please relaunch from your application.</h3>";
       }
       return; // Stop execution, don't load the Gantt
     }
 
-    // 2) Fetch the full set of tasks
+    // B) Fetch the full set of tasks
     let allTasks = await fetchTasksJSON();
 
-    // 3) Filter tasks based on projectId
+    // C) Filter tasks based on projectId
     allTasks = filterByProjectId(allTasks, projectId);
 
-    // 4) Create the Gantt instance
+    // D) Create the Gantt instance with a toolbar
     const gantt = new Gantt({
       dataSource: allTasks,
       height: "450px",
+
+      // Enable a built-in toolbar with whichever items you want
+      toolbar: ["ExpandAll", "CollapseAll", "ExcelExport", "CsvExport"],
+
+      // Handle toolbar button clicks (optional)
+      toolbarClick: (args) => {
+        console.log("Toolbar item clicked:", args.item.id);
+        // e.g., if (args.item.id.includes("Export")) { /* custom logic */ }
+      },
+
+      // Standard Gantt field mappings
       taskFields: {
         id: "TaskID",
         name: "TaskName",
@@ -70,7 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         duration: "Duration",
         progress: "Progress",
         dependency: "Predecessor",
-        child: "subtasks"
+        child: "subtasks",
       },
       treeColumnIndex: 1,
       columns: [
@@ -80,17 +97,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         { field: "EndDate" },
         { field: "Duration" },
         { field: "Predecessor" },
-        { field: "Progress" }
+        { field: "Progress" },
       ],
       labelSettings: {
-        leftLabel: "TaskName"
+        leftLabel: "TaskName",
       },
       projectStartDate: new Date("03/24/2024"),
-      projectEndDate: new Date("07/06/2024")
+      projectEndDate: new Date("07/06/2024"),
     });
 
-    // 5) Render the Gantt
+    // E) Render the Gantt inside your existing container
     gantt.appendTo("#DefaultFunctionalities");
+
+    // F) Add a click listener for the "Settings" button (if you have one in your HTML)
+    const settingsButton = document.getElementById("settings-btn");
+    if (settingsButton) {
+      settingsButton.addEventListener("click", () => {
+        console.log("Settings button clicked. Show a sidebar or dialog here.");
+        // e.g., open a custom sidebar, show a modal, etc.
+      });
+    }
   } catch (error) {
     console.error("Error loading Gantt tasks:", error);
   }
