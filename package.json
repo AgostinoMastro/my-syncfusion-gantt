@@ -1,0 +1,18 @@
+{
+  "name": "my-syncfusion-gantt",
+  "version": "1.0.0",
+  "description": "Syncfusion EJ2 Gantt example (fetching tasks from JSON)",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "@syncfusion/ej2-base": "^20.4.48",
+    "@syncfusion/ej2-gantt": "^20.4.48"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
