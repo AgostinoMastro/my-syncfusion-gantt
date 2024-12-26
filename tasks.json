@@ -1,0 +1,60 @@
+[
+  {
+    "ProjectID": 123,
+    "TaskID": 1,
+    "TaskName": "Planning",
+    "StartDate": "2024-03-24",
+    "EndDate": "2024-03-28",
+    "Duration": 5,
+    "Progress": 20,
+    "subtasks": [
+      {
+        "ProjectID": 123,
+        "TaskID": 2,
+        "TaskName": "Plan timeline",
+        "StartDate": "2024-03-24",
+        "EndDate": "2024-03-25",
+        "Duration": 2,
+        "Progress": 100
+      },
+      {
+        "ProjectID": 123,
+        "TaskID": 3,
+        "TaskName": "Plan budget",
+        "StartDate": "2024-03-26",
+        "EndDate": "2024-03-28",
+        "Duration": 3,
+        "Progress": 80
+      }
+    ]
+  },
+  {
+    "ProjectID": 456,
+    "TaskID": 10,
+    "TaskName": "New Website",
+    "StartDate": "2024-04-01",
+    "EndDate": "2024-04-15",
+    "Duration": 15,
+    "Progress": 50,
+    "subtasks": [
+      {
+        "ProjectID": 456,
+        "TaskID": 11,
+        "TaskName": "Design mockups",
+        "StartDate": "2024-04-01",
+        "EndDate": "2024-04-05",
+        "Duration": 5,
+        "Progress": 60
+      },
+      {
+        "ProjectID": 456,
+        "TaskID": 12,
+        "TaskName": "Front-end dev",
+        "StartDate": "2024-04-06",
+        "EndDate": "2024-04-10",
+        "Duration": 5,
+        "Progress": 30
+      }
+    ]
+  }
+]
