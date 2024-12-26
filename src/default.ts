@@ -2,7 +2,7 @@ import { registerLicense } from "@syncfusion/ej2-base";
 import { Gantt, Selection } from "@syncfusion/ej2-gantt";
 
 // 1) Register your Syncfusion license key (replace with your actual key).
-registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERhWH5bcHddT2g=");
+registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERhWnpbcXJQRmQ=");
 
 // 2) Function to fetch tasks from tasks.json in the same folder as index.html.
 async function fetchTasksJSON(): Promise<any[]> {
