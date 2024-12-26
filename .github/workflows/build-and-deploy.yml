@@ -20,7 +20,7 @@ jobs:
 
       # 3) Install dependencies
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       # 4) Build your webpack project
       - name: Build
