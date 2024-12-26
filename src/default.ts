@@ -1,11 +1,11 @@
 import { registerLicense } from "@syncfusion/ej2-base";
 import { Gantt, Selection } from "@syncfusion/ej2-gantt";
 
-// Register your Syncfusion license key here
+// Register your Syncfusion license key (replace the placeholder)
 registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERgWXxacnRcT2k=");
 
 /**
- * Fetch tasks from `tasks.json`.
+ * Fetch tasks from the `tasks.json` file.
  */
 async function fetchTasksJSON(): Promise<any[]> {
   const response = await fetch("./tasks.json");
@@ -13,21 +13,12 @@ async function fetchTasksJSON(): Promise<any[]> {
 }
 
 /**
- * Safely get a numeric projectId from the URL, or return null if invalid.
+ * Parse projectId from URL (?projectId=123).
  */
 function getProjectId(): number | null {
   const params = new URLSearchParams(window.location.search);
-  const raw = params.get("projectId"); // e.g. "123" or "" or null
-  if (!raw) {
-    // If there's no param or it's empty string
-    return null;
-  }
-  const num = parseInt(raw, 10);
-  // If parseInt fails, num will be NaN => we treat that as invalid
-  if (isNaN(num)) {
-    return null;
-  }
-  return num;
+  const raw = params.get("projectId");
+  return raw ? parseInt(raw, 10) : null;
 }
 
 /**
@@ -37,40 +28,37 @@ function filterByProjectId(tasks: any[], projectId: number): any[] {
   return tasks
     .filter(task => task.ProjectID === projectId)
     .map(task => {
-      if (Array.isArray(task.subtasks)) {
+      if (task.subtasks) {
         task.subtasks = filterByProjectId(task.subtasks, projectId);
       }
       return task;
     });
 }
 
-// Inject Gantt modules
+// Inject the required Gantt modules.
 Gantt.Inject(Selection);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1) Get a valid project ID (or null if missing/invalid)
-  const projectId = getProjectId();
-
-  // 2) If it's null (missing, empty, or invalid), don't show the chart
-  if (projectId === null) {
-    const container = document.getElementById("DefaultFunctionalities");
-    if (container) {
-      container.innerHTML = `
-        <h3 style="color:red">
-          Error: Project ID missing or invalid. Please relaunch from your application.
-        </h3>`;
-    }
-    return; // Stop execution here
-  }
-
   try {
-    // 3) Fetch all tasks
+    // 1) Check if a valid projectId is present
+    const projectId = getProjectId();
+    if (!projectId) {
+      // If not, show an error message in the container
+      const container = document.getElementById("DefaultFunctionalities");
+      if (container) {
+        container.innerHTML =
+          "<h3 style='color:red'>Error: Project ID missing. Please relaunch from your application</h3>";
+      }
+      return; // Stop execution, don't load the Gantt
+    }
+
+    // 2) Fetch the full set of tasks
     let allTasks = await fetchTasksJSON();
 
-    // 4) Filter by this project ID
+    // 3) Filter tasks based on projectId
     allTasks = filterByProjectId(allTasks, projectId);
 
-    // 5) Create Gantt
+    // 4) Create the Gantt instance
     const gantt = new Gantt({
       dataSource: allTasks,
       height: "450px",
@@ -82,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         duration: "Duration",
         progress: "Progress",
         dependency: "Predecessor",
-        child: "subtasks",
+        child: "subtasks"
       },
       treeColumnIndex: 1,
       columns: [
@@ -92,18 +80,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         { field: "EndDate" },
         { field: "Duration" },
         { field: "Predecessor" },
-        { field: "Progress" },
+        { field: "Progress" }
       ],
       labelSettings: {
-        leftLabel: "TaskName",
+        leftLabel: "TaskName"
       },
       projectStartDate: new Date("03/24/2024"),
-      projectEndDate: new Date("07/06/2024"),
+      projectEndDate: new Date("07/06/2024")
     });
 
-    // 6) Append to DOM
+    // 5) Render the Gantt
     gantt.appendTo("#DefaultFunctionalities");
   } catch (error) {
-    console.error("Error loading tasks for project:", error);
+    console.error("Error loading Gantt tasks:", error);
   }
 });
