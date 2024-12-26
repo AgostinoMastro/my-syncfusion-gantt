@@ -56,5 +56,17 @@
         "Progress": 30
       }
     ]
+  },
+    {
+      {
+        "ProjectID": 123,
+        "TaskID": 3,
+        "TaskName": "Prepare Estimate",
+        "StartDate": "2024-03-29",
+        "EndDate": "2024-04-04",
+        "Duration": 3,
+        "Progress": 80
+      }
+    ]
   }
 ]
