@@ -5,7 +5,7 @@
     "TaskName": "Planning",
     "StartDate": "2024-03-24",
     "EndDate": "2024-03-28",
-    "Duration": 8,
+    "Duration": 5,
     "Progress": 20,
     "subtasks": [
       {
@@ -19,17 +19,8 @@
       },
       {
         "ProjectID": 123,
-        "TaskID": 4,
-        "TaskName": "Plan budget",
-        "StartDate": "2024-03-26",
-        "EndDate": "2024-03-28",
-        "Duration": 3,
-        "Progress": 80
-      },
-      {
-        "ProjectID": 123,
         "TaskID": 3,
-        "TaskName": "Prepare Estiamte",
+        "TaskName": "Plan budget",
         "StartDate": "2024-03-26",
         "EndDate": "2024-03-28",
         "Duration": 3,
