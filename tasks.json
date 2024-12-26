@@ -58,13 +58,21 @@
     ]
   },
     {
+    "ProjectID": 123,
+    "TaskID": 1,
+    "TaskName": "Planning",
+    "StartDate": "2024-03-24",
+    "EndDate": "2024-03-28",
+    "Duration": 5,
+    "Progress": 20,
+    "subtasks": [
       {
         "ProjectID": 123,
         "TaskID": 3,
         "TaskName": "Prepare Estimate",
         "StartDate": "2024-03-29",
         "EndDate": "2024-04-04",
-        "Duration": 3,
+        "Duration": 6,
         "Progress": 80
       }
     ]
