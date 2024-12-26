@@ -2,7 +2,7 @@ import { registerLicense } from "@syncfusion/ej2-base";
 import { Gantt, Selection } from "@syncfusion/ej2-gantt";
 
 // Register your Syncfusion license key here
-registerLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf0x0QXxbf1x1ZFRHal1QTnVaUiweQnxTdEFiW31YcXZQQmJcUEF/WQ==");
+registerLicense("GTIlMmhha31ifWBgaGFnfGNifGFjYWZzYmJpYmJpYGZoMjQ8ICc6PTwTITYlMj8yJzZ9MDw+");
 
 /**
  * Fetch tasks from `tasks.json`.
