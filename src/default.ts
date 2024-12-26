@@ -1,11 +1,11 @@
 import { registerLicense } from "@syncfusion/ej2-base";
 import { Gantt, Selection } from "@syncfusion/ej2-gantt";
 
-// Register your Syncfusion license key (replace the placeholder)
+// Register your Syncfusion license key here
 registerLicense("YOUR_LICENSE_KEY_STRING");
 
 /**
- * Fetch tasks from the `tasks.json` file.
+ * Fetch tasks from `tasks.json`.
  */
 async function fetchTasksJSON(): Promise<any[]> {
   const response = await fetch("./tasks.json");
@@ -13,12 +13,21 @@ async function fetchTasksJSON(): Promise<any[]> {
 }
 
 /**
- * Parse projectId from URL (?projectId=123).
+ * Safely get a numeric projectId from the URL, or return null if invalid.
  */
 function getProjectId(): number | null {
   const params = new URLSearchParams(window.location.search);
-  const raw = params.get("projectId");
-  return raw ? parseInt(raw, 10) : null;
+  const raw = params.get("projectId"); // e.g. "123" or "" or null
+  if (!raw) {
+    // If there's no param or it's empty string
+    return null;
+  }
+  const num = parseInt(raw, 10);
+  // If parseInt fails, num will be NaN => we treat that as invalid
+  if (isNaN(num)) {
+    return null;
+  }
+  return num;
 }
 
 /**
@@ -28,37 +37,40 @@ function filterByProjectId(tasks: any[], projectId: number): any[] {
   return tasks
     .filter(task => task.ProjectID === projectId)
     .map(task => {
-      if (task.subtasks) {
+      if (Array.isArray(task.subtasks)) {
         task.subtasks = filterByProjectId(task.subtasks, projectId);
       }
       return task;
     });
 }
 
-// Inject the required Gantt modules.
+// Inject Gantt modules
 Gantt.Inject(Selection);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    // 1) Check if a valid projectId is present
-    const projectId = getProjectId();
-    if (!projectId) {
-      // If not, show an error message in the container
-      const container = document.getElementById("DefaultFunctionalities");
-      if (container) {
-        container.innerHTML =
-          "<h3 style='color:red'>Error: Project ID missing. Please relaunch from your application</h3>";
-      }
-      return; // Stop execution, don't load the Gantt
-    }
+  // 1) Get a valid project ID (or null if missing/invalid)
+  const projectId = getProjectId();
 
-    // 2) Fetch the full set of tasks
+  // 2) If it's null (missing, empty, or invalid), don't show the chart
+  if (projectId === null) {
+    const container = document.getElementById("DefaultFunctionalities");
+    if (container) {
+      container.innerHTML = `
+        <h3 style="color:red">
+          Error: Project ID missing or invalid. Please relaunch from your application.
+        </h3>`;
+    }
+    return; // Stop execution here
+  }
+
+  try {
+    // 3) Fetch all tasks
     let allTasks = await fetchTasksJSON();
 
-    // 3) Filter tasks based on projectId
+    // 4) Filter by this project ID
     allTasks = filterByProjectId(allTasks, projectId);
 
-    // 4) Create the Gantt instance
+    // 5) Create Gantt
     const gantt = new Gantt({
       dataSource: allTasks,
       height: "450px",
@@ -70,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         duration: "Duration",
         progress: "Progress",
         dependency: "Predecessor",
-        child: "subtasks"
+        child: "subtasks",
       },
       treeColumnIndex: 1,
       columns: [
@@ -80,18 +92,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         { field: "EndDate" },
         { field: "Duration" },
         { field: "Predecessor" },
-        { field: "Progress" }
+        { field: "Progress" },
       ],
       labelSettings: {
-        leftLabel: "TaskName"
+        leftLabel: "TaskName",
       },
       projectStartDate: new Date("03/24/2024"),
-      projectEndDate: new Date("07/06/2024")
+      projectEndDate: new Date("07/06/2024"),
     });
 
-    // 5) Render the Gantt
+    // 6) Append to DOM
     gantt.appendTo("#DefaultFunctionalities");
   } catch (error) {
-    console.error("Error loading Gantt tasks:", error);
+    console.error("Error loading tasks for project:", error);
   }
 });
