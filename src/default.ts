@@ -5,7 +5,7 @@ import { Gantt, Selection, Toolbar } from "@syncfusion/ej2-gantt";
  * 1) Register your Syncfusion license key.
  *    (Replace "YOUR_LICENSE_KEY_STRING" with your actual key.)
  */
-registerLicense("ORg4AjUWIQA/Gnt2XVhhQlJHfV5dX2dWfFN0QHNYflRxdV9FZUwgOX1dQl9nSHxRcERgWXxacnRcT2k=");
+registerLicense("Ngo9BigBOggjHTQxAR8/V1NMaF5cXmBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH1ceHVXRWZZWUR0X0I=");
 
 /**
  * Fetch tasks from the `tasks.json` file.
